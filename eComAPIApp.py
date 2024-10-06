@@ -1,13 +1,17 @@
 from flask import Flask, jsonify, request
 from flask_pymongo import PyMongo
 from flask_cors import CORS
+from dotenv import load_dotenv
+import os
 from bson.objectid import ObjectId
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 
 # Replace <username> and <password> with your actual credentials
-app.config["MONGO_URI"] = "mongodb+srv://hrushikesh069:hrushikesh2021@cluster0.k55w3.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=cluster0"  
+app.config["MONGO_URI"] = os.getenv("MONGO_URI")  
 mongo = PyMongo(app)
 
 @app.route('/products', methods=['GET'])
