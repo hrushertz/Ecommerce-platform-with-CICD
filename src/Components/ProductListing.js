@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from './CartContext';
+import './ProductListing.css';  // Importing external CSS for styling
 
 const ProductListing = () => {
     const [products, setProducts] = useState([]);
@@ -32,23 +33,42 @@ const ProductListing = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <div className="loading-container">
+                <div className="spinner"></div>
+                <p>Loading products...</p>
+            </div>
+        );
     }
 
     return (
-        <div>
-            <h1>Products</h1>
-            <ul>
+        <div className="product-listing-container">
+            <h1 className="title">Our Products</h1>
+            <div className="product-grid">
                 {products.map((product) => (
-                    <li key={product.id}>
-                        <h2>{product.name}</h2>
-                        <p>{product.description}</p>
-                        <p>Price: ${product.price}</p>
-                        <button onClick={() => addToCart(product)}>Add to Cart</button>
-                        <button onClick={() => handleViewDetails(product.id)}>View Details</button>
-                    </li>
+                    <div className="product-card" key={product.id}>
+                        <div className="product-info">
+                            <h2 className="product-name">{product.name}</h2>
+                            <p className="product-description">{product.description}</p>
+                            <p className="product-price">Price: ${product.price}</p>
+                        </div>
+                        <div className="product-actions">
+                            <button 
+                                className="btn add-to-cart-btn" 
+                                onClick={() => addToCart(product)}
+                            >
+                                Add to Cart
+                            </button>
+                            <button 
+                                className="btn view-details-btn" 
+                                onClick={() => handleViewDetails(product.id)}
+                            >
+                                View Details
+                            </button>
+                        </div>
+                    </div>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 };
