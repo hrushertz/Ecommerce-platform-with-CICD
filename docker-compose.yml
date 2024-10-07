@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+    image: hrushertz/ecom-api:0.0.1-RELEASE
+    env_file: ./backend/.env  # Ensure this has your MongoDB Atlas connection string
+    ports:
+      - "5001:5000"
+    networks:
+      - ecommerce-net
+    restart: always  # Restart policy for backend service
+
+  frontend:
+    image: hrushertz/ecom-app:0.0.1-RELEASE
+    ports:
+      - "3000:3000"
+    networks:
+      - ecommerce-net
+    depends_on:
+      - backend  # Frontend depends on backend
+    restart: always  # Restart policy for frontend service
+
+networks:
+  ecommerce-net:
+    driver: bridge
