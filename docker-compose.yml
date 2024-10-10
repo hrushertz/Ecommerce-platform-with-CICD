@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    image: gcr.io/ecommerce-test-437909/ecom-api:0.0.1-STABLE-TEST
+    image: gcr.io/ecommerce-test-437909/ecom-api:0.0.2-GLOBAL-STABLE
     env_file: ./backend/.env  # Ensure this has your MongoDB Atlas connection string
     ports:
       - "5000:5000"
@@ -11,7 +11,7 @@ services:
     restart: always  # Restart policy for backend service
 
   frontend:
-    image: gcr.io/ecommerce-test-437909/ecom-app:0.0.1-STABLE-TEST
+    image: gcr.io/ecommerce-test-437909/ecom-app:0.0.2-GLOBAL-STABLE
     ports:
       - "3000:3000"
     networks:

@@ -1,4 +1,3 @@
-
 # Use the official Node.js image as the base image
 FROM node:18-alpine
 
@@ -21,4 +20,4 @@ COPY . .
 EXPOSE 3000
 
 # Start the React app
-CMD ["npm", "start"]
+CMD ["npm", "start"]
