@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useCart } from './CartContext';
+import { Card, CardContent, Button, Typography, CircularProgress } from '@mui/material';
 
 const ProductDetails = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
-    const { addToCart } = useCart(); // Use cart context
+    const { addToCart } = useCart();
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -28,20 +29,22 @@ const ProductDetails = () => {
     }, [id]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <CircularProgress />;
     }
 
     if (!product) {
-        return <div>Product not found!</div>;
+        return <Typography>Product not found!</Typography>;
     }
 
     return (
-        <div>
-            <h1>{product.name}</h1>
-            <p>{product.description}</p>
-            <p>Price: ${product.price}</p>
-            <button onClick={() => addToCart(product)}>Add to Cart</button>
-        </div>
+        <Card>
+            <CardContent>
+                <Typography variant="h4">{product.name}</Typography>
+                <Typography variant="body1">{product.description}</Typography>
+                <Typography variant="h5">Price: ${product.price}</Typography>
+                <Button variant="contained" color="primary" onClick={() => addToCart(product)}>Add to Cart</Button>
+            </CardContent>
+        </Card>
     );
 };
 

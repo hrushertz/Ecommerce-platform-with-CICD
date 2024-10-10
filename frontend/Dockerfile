@@ -1,3 +1,4 @@
+
 # Use the official Node.js image as the base image
 FROM node:18-alpine
 
@@ -10,6 +11,9 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
+# Install additional MUI packages
+RUN npm install @mui/material @emotion/react @emotion/styled @mui/icons-material
+
 # Copy the rest of the application files into the container
 COPY . .
 
@@ -17,4 +21,4 @@ COPY . .
 EXPOSE 3000
 
 # Start the React app
-CMD ["npm", "start"]
+CMD ["npm", "start"]
