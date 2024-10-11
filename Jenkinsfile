@@ -2,23 +2,33 @@ pipeline{
     agent any
     stages{
         stage('Build'){
-            echo("Build")
+            steps{
+                echo("Build")
+            }
         }
 
         stage('Test'){
-            echo("Testing")
+            steps{
+                echo("Testing")
+            }
         }
 
         stage('Integration Testing'){
-            echo("Integration Testing")
+            steps{
+                echo("Integration Testing")
+            }
         }
 
         stage('Build Docker Image'){
-            echo("Building Docker Image")
+           steps{
+             echo("Building Docker Image")
+           }
         }
 
         stage('Push Docker Image'){
-            echo("Pushing Docker Image")
+           steps{
+             echo("Pushing Docker Image")
+           }
         }
     }
 
