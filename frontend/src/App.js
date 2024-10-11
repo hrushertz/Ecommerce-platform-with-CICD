@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
 import ProductListing from './Components/ProductListing';
 import ProductDetails from './Components/ProductDetails';
 import Cart from './Components/Cart';
@@ -10,6 +10,12 @@ import { AppBar, Toolbar, Button, Typography } from '@mui/material';
 
 const AppBarWithLogout = () => {
     const { isLoggedIn, logout } = useCart();
+    const navigate = useNavigate(); // Initialize the navigation hook
+
+    const handleLogout = () => {
+        logout(); // Call the logout function
+        navigate('/'); // Redirect to ProductListing.js or homepage after logout
+    };
 
     return (
         <AppBar position="static">
@@ -21,7 +27,7 @@ const AppBarWithLogout = () => {
                 <Button color="inherit" component={Link} to="/cart">View Cart</Button>
                 {isLoggedIn ? (
                     <>
-                        <Button color="inherit" onClick={() => { logout(); window.location.reload(); }}>Logout</Button>
+                        <Button color="inherit" onClick={handleLogout}>Logout</Button>
                     </>
                 ) : (
                     <>
