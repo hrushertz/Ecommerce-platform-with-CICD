@@ -12,7 +12,7 @@ const ProductListing = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await fetch('http://34.93.132.98:5000/products');
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/products`); // Use backticks here
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -24,9 +24,10 @@ const ProductListing = () => {
                 setLoading(false);
             }
         };
-
+    
         fetchProducts();
     }, []);
+    
 
     const handleViewDetails = (id) => {
         navigate(`/product/${id}`);
