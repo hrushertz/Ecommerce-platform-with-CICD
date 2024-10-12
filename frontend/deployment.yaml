@@ -1,54 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: ecom-frontend
   labels:
     app: ecom-frontend
-  name: ecom-frontend
-  namespace: default
 spec:
-  replicas: 2 #CHANGE
-  minReadySeconds: 45
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%               # Allows up to 25% more Pods than desired during the update
+      maxUnavailable: 25%         # Allows 25% of the Pods to be unavailable during the update
   selector:
     matchLabels:
       app: ecom-frontend
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
   template:
     metadata:
       labels:
         app: ecom-frontend
     spec:
+      restartPolicy: Always         # Ensures the containers always restart on failure
+      terminationGracePeriodSeconds: 30  # Graceful shutdown period of 30 seconds
       containers:
-      - image: gcr.io/ecommerce-test-437909/ecom-app:0.0.2-GLOBAL-STABLE #CHANGE
-        imagePullPolicy: Always
-        name: ecom-frontend
-        # env:
-        #   - name: CURRENCY_EXCHANGE_SERVICE_HOST
-        #     value: http://currency-exchange
-        
-        #     valueFrom: 
-        #       configMapKeyRef:
-        #         key: CURRENCY_EXCHANGE_SERVICE_HOST
-        #         name: currency-conversion-config-map
-      restartPolicy: Always
-      terminationGracePeriodSeconds: 30
+      - name: ecom-frontend
+        image: gcr.io/ecommerce-test-437909/ecom-app:0.0.4-GLOBAL-STABLE  # Replace with your image version
+        imagePullPolicy: Always  # Ensures the image is always pulled
+        ports:
+        - containerPort: 3000
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  labels: #PODS
-    app: ecom-frontend
-  name: ecom-frontend
-  namespace: default
+  name: ecom-frontend-service
 spec:
-  ports:
-  - port: 3000 #CHANGE
-    protocol: TCP
-    targetPort: 3000 #CHANGE
   selector:
-    app: currency-conversion
-  sessionAffinity: ClientIP
+    app: ecom-frontend
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
   type: LoadBalancer
