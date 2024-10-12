@@ -12,7 +12,7 @@ export const CartProvider = ({ children }) => {
         // Fetch cart items when user logs in
         if (isLoggedIn && userId) {
             const fetchCart = async () => {
-                const response = await fetch(`http://127.0.0.1:5000/cart/${userId}`);
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/cart/${userId}`);
                 const data = await response.json();
                 setCartItems(data);
             };
@@ -24,7 +24,7 @@ export const CartProvider = ({ children }) => {
         setCartItems((prevItems) => [...prevItems, product]);
         // Save cart to the backend
         if (userId) {
-            fetch(`http://127.0.0.1:5000/cart/${userId}`, {
+            fetch(`${process.env.REACT_APP_BACKEND_URL}/cart/${userId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export const CartProvider = ({ children }) => {
         setCartItems(updatedCart);
         // Update cart in the backend
         if (userId) {
-            fetch(`http://127.0.0.1:5000/cart/${userId}`, {
+            fetch(`${process.env.REACT_APP_BACKEND_URL}/cart/${userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
