@@ -1,21 +1,16 @@
+# ecom-backend.yaml
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app: ecom-backend
   name: ecom-backend
-  namespace: default
 spec:
   replicas: 1
-  minReadySeconds: 45
   selector:
     matchLabels:
       app: ecom-backend
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -23,51 +18,25 @@ spec:
     spec:
       containers:
       - name: ecom-backend
-        image: gcr.io/ecommerce-test-437909/ecom-api:0.0.2-GLOBAL-STABLE
-        imagePullPolicy: Always
+        image: gcr.io/ecommerce-test-437909/ecom-api:0.0.6-GLOBAL-STABLE
         ports:
-        - name: liveness-port
-          containerPort: 5000
-        resources:
-          requests:
-            cpu: 100m
-            memory: 512Mi
-          limits:
-            cpu: 500m
-            memory: 1024Mi
-        # readinessProbe:
-        #   httpGet:
-        #     path: /health  # Adjusted path
-        #     port: liveness-port
-        #   failureThreshold: 5
-        #   periodSeconds: 10
-        #   initialDelaySeconds: 90
-        # livenessProbe:
-        #   httpGet:
-        #     path: /health  # Adjusted path
-        #     port: liveness-port
-        #   failureThreshold: 5
-        #   periodSeconds: 10
-        #   initialDelaySeconds: 90
-      restartPolicy: Always
-      terminationGracePeriodSeconds: 30
+        - containerPort: 5000
+        env:
+        - name: MONGODB_URI  # Example of setting environment variables
+          value: "mongodb+srv://tanvirauti2620:tanvir1234@cluster0.epkgqyp.mongodb.net/ecommerce?retryWrites=true&w=majority"  # Replace with your actual MongoDB URI
 ---
 apiVersion: v1
 kind: Service
 metadata:
+  name: ecom-backend
   labels:
     app: ecom-backend
-  name: ecom-backend
-  namespace: default
 spec:
-  ports:
-  - port: 5000
-    protocol: TCP
-    targetPort: 5000
   selector:
     app: ecom-backend
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 10800
-  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 5000   # Port inside the cluster
+      targetPort: 5000   # Container port
+      nodePort: 30001   # NodePort for external access
+  type: NodePort

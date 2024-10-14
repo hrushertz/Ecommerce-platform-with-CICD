@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ecommerce-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1  # Rewrite the target if needed
+spec:
+  rules:
+  - host: buyhive.tech  # Use your actual domain
+    http:
+      paths:
+      - path: /api/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: ecom-backend
+            port:
+              number: 5000
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ecom-frontend
+            port:
+              number: 3000

@@ -15,7 +15,11 @@ CORS(app)  # Enable CORS for all routes
 app.config["MONGO_URI"] = os.getenv("MONGO_URI")
 mongo = PyMongo(app)
 
-@app.route('/products', methods=['GET'])
+@app.route('/')  # Define the root route
+def home():
+    return "Welcome to the eCommerce API!"
+
+@app.route('/api/products', methods=['GET'])
 def get_products():
     """Fetch all products from the database."""
     products = mongo.db.products.find()
@@ -29,7 +33,7 @@ def get_products():
         })
     return jsonify(output)
 
-@app.route('/products/<id>', methods=['GET'])
+@app.route('/api/products/<id>', methods=['GET'])
 def get_product(id):
     """Fetch a single product by ID from the database."""
     product = mongo.db.products.find_one({'_id': ObjectId(id)})
@@ -44,7 +48,7 @@ def get_product(id):
     else:
         return jsonify({'error': 'Product not found'}), 404
 
-@app.route('/products', methods=['POST'])
+@app.route('/api/products', methods=['POST'])
 def add_product():
     """Add a new product to the database."""
     data = request.get_json()
@@ -56,7 +60,7 @@ def add_product():
     mongo.db.products.insert_one(new_product)
     return jsonify({'message': 'Product added successfully!'}), 201
 
-@app.route('/products/<id>', methods=['PUT'])
+@app.route('/api/products/<id>', methods=['PUT'])
 def update_product(id):
     """Update a product by ID in the database."""
     data = request.get_json()
@@ -70,13 +74,13 @@ def update_product(id):
     )
     return jsonify({'message': 'Product updated successfully!'}), 200
 
-@app.route('/products/<id>', methods=['DELETE'])
+@app.route('/api/products/<id>', methods=['DELETE'])
 def delete_product(id):
     """Delete a product by ID from the database."""
     mongo.db.products.delete_one({'_id': ObjectId(id)})
     return jsonify({'message': 'Product deleted successfully!'}), 200
 
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
 def login():
     """User login."""
     data = request.get_json()
@@ -85,7 +89,7 @@ def login():
         return jsonify({'message': 'Login successful', 'user_id': str(user['_id'])}), 200
     return jsonify({'message': 'Invalid username or password'}), 401
 
-@app.route('/signup', methods=['POST'])
+@app.route('/api/signup', methods=['POST'])
 def signup():
     """User signup."""
     data = request.get_json()
@@ -93,7 +97,7 @@ def signup():
     mongo.db.users.insert_one({'username': data['username'], 'password': hashed_password})
     return jsonify({'message': 'User created successfully!'}), 201
 
-@app.route('/cart/<user_id>', methods=['GET', 'POST', 'PUT'])
+@app.route('/api/cart/<user_id>', methods=['GET', 'POST', 'PUT'])
 def manage_cart(user_id):
     """Fetch or update the user's cart."""
     if request.method == 'GET':

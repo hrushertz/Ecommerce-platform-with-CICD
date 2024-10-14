@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, Typography } from '@mui/material';
 
+// Update BACKEND_SERVICE_HOST to point to the Ingress
+const BACKEND_SERVICE_HOST = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:5000";
+
 const Signup = () => {
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });
     const navigate = useNavigate();
@@ -16,7 +19,7 @@ const Signup = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/signup`, {
+        const response = await fetch(`http://buyhive.tech/api/signup`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -25,7 +28,9 @@ const Signup = () => {
         });
         const data = await response.json();
         if (data.message) {
-            navigate('/login');
+            navigate('/login'); // Navigate to login on successful signup
+        } else {
+            alert(data.error || "Signup failed!"); // Handle signup failure
         }
     };
 

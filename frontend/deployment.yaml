@@ -5,12 +5,7 @@ metadata:
   labels:
     app: ecom-frontend
 spec:
-  replicas: 3
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 25%               # Allows up to 25% more Pods than desired during the update
-      maxUnavailable: 25%         # Allows 25% of the Pods to be unavailable during the update
+  replicas: 1  # Number of replicas for load balancing and redundancy
   selector:
     matchLabels:
       app: ecom-frontend
@@ -19,24 +14,28 @@ spec:
       labels:
         app: ecom-frontend
     spec:
-      restartPolicy: Always         # Ensures the containers always restart on failure
-      terminationGracePeriodSeconds: 30  # Graceful shutdown period of 30 seconds
       containers:
       - name: ecom-frontend
-        image: gcr.io/ecommerce-test-437909/ecom-app:0.0.4-GLOBAL-STABLE  # Replace with your image version
-        imagePullPolicy: Always  # Ensures the image is always pulled
+        image: gcr.io/ecommerce-test-437909/ecom-app:0.1.25-GLOBAL-STABLE  
         ports:
         - containerPort: 3000
+        env:
+          - name: REACT_APP_BACKEND_URL
+            value: "http://ecom-backend:5000"  # Internal connection to backend
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ecom-frontend-service
+  name: ecom-frontend
+  labels:
+    app: ecom-frontend
 spec:
   selector:
     app: ecom-frontend
   ports:
     - protocol: TCP
-      port: 3000
-      targetPort: 3000
-  type: LoadBalancer
+      port: 3000   # Port that the service will expose
+      targetPort: 3000  # Port on the container
+      nodePort: 30002  # NodePort for external access (optional)
+  type: NodePort  # NodePort type service to expose the application externally
