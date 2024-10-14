@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCart } from './CartContext';
-import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, CircularProgress } from '@mui/material';
+import { Button, Typography, List, ListItem, ListItemText, ListItemSecondaryAction } from '@mui/material';
 
 const Cart = () => {
     const { cartItems, removeFromCart } = useCart();

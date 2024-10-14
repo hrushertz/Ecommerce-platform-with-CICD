@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, Typography } from '@mui/material';
 
 // Update BACKEND_SERVICE_HOST to point to the Ingress
-const BACKEND_SERVICE_HOST = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:5000";
+// const BACKEND_SERVICE_HOST = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:5000";
 
 const Signup = () => {
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });

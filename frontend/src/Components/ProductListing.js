@@ -4,7 +4,7 @@ import { useCart } from './CartContext';
 import { Card, CardContent, Button, Typography, Grid, CircularProgress } from '@mui/material';
 
 // Use the environment variable for the backend URL
-const BACKEND_SERVICE_HOST = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:5000"; // Change this to match the Ingress path
+// const BACKEND_SERVICE_HOST = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:5000"; // Change this to match the Ingress path
 
 const ProductListing = () => {
     const [products, setProducts] = useState([]);
