@@ -1,9 +1,12 @@
-import React, { useState } from 'react'; 
-import { useNavigate } from 'react-router-dom';
+// AdminLogin.js
+import React, { useState } from 'react';
+import { useCart } from './CartContext';
 import { TextField, Button, Box, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-const Signup = () => {
-    const [formData, setFormData] = useState({ username: '', email: '', password: '' });
+const AdminLogin = () => {
+    const [formData, setFormData] = useState({ username: '', password: '' });
+    const { adminLogin } = useCart(); // Get the admin login function
     const navigate = useNavigate();
 
     const handleInputChange = (e) => {
@@ -16,16 +19,18 @@ const Signup = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch('http://buyhive.tech/api/signup', {
+        const response = await fetch('http://buyhive.tech/api/admin/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(formData),
         });
-        const data = await response.json();
-        if (data.message) {
-            navigate('/login');
+        if (response.ok) {
+            adminLogin(); // Set admin login state to true
+            navigate('/admin/dashboard'); // Redirect to the admin dashboard
+        } else {
+            alert('Login failed. Please check your credentials.');
         }
     };
 
@@ -47,22 +52,12 @@ const Signup = () => {
                 boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
             }}
         >
-            <Typography variant="h4" gutterBottom>Signup</Typography>
+            <Typography variant="h4" gutterBottom>Admin Login</Typography>
             <TextField
                 label="Username"
                 variant="outlined"
                 name="username"
-                value={formData.username}
-                onChange={handleInputChange}
-                fullWidth
-                margin="normal"
-                required
-            />
-            <TextField
-                label="Email"
-                variant="outlined"
-                name="email"
-                value={formData.email}
+                value={formData.username} // Ensure value is defined
                 onChange={handleInputChange}
                 fullWidth
                 margin="normal"
@@ -73,17 +68,17 @@ const Signup = () => {
                 variant="outlined"
                 type="password"
                 name="password"
-                value={formData.password}
+                value={formData.password} // Ensure value is defined
                 onChange={handleInputChange}
                 fullWidth
                 margin="normal"
                 required
             />
             <Button variant="contained" color="primary" type="submit" fullWidth>
-                Sign Up
+                Login
             </Button>
         </Box>
     );
 };
 
-export default Signup;
+export default AdminLogin;

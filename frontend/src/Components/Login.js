@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { useCart } from './CartContext';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Typography, Box } from '@mui/material';
-
-// Update BACKEND_SERVICE_HOST to point to the Ingress
-//const BACKEND_SERVICE_HOST = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:5000";
+import { TextField, Button, Box, Typography } from '@mui/material';
 
 const Login = () => {
     const [formData, setFormData] = useState({ username: '', password: '' });
@@ -18,29 +15,19 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const response = await fetch(`http://buyhive.tech/api/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const data = await response.json();
-            if (data.message === 'Login successful') {
-                login(data.user_id); // Pass the user ID upon login
-                navigate('/'); // Redirect to home on successful login
-            } else {
-                alert(data.message);
-            }
-        } catch (error) {
-            console.error('Login failed:', error);
-            alert('Login failed. Please try again.');
+        const response = await fetch('http://buyhive.tech/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        });
+        const data = await response.json();
+        if (data.message === 'Login successful') {
+            login(data.user_id); // Pass the user ID upon login
+            navigate('/'); // Redirect to home on successful login
+        } else {
+            alert(data.message);
         }
     };
 
@@ -65,6 +52,7 @@ const Login = () => {
             <Typography variant="h4" gutterBottom>Login</Typography>
             <TextField
                 label="Username"
+                variant="outlined"
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
@@ -74,6 +62,7 @@ const Login = () => {
             />
             <TextField
                 label="Password"
+                variant="outlined"
                 type="password"
                 name="password"
                 value={formData.password}
@@ -82,7 +71,7 @@ const Login = () => {
                 margin="normal"
                 required
             />
-            <Button type="submit" variant="contained" color="primary" fullWidth>
+            <Button variant="contained" color="primary" type="submit" fullWidth>
                 Login
             </Button>
         </Box>

@@ -1,13 +1,13 @@
+// CartContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Update BACKEND_SERVICE_HOST to point to the Ingress
-//const BACKEND_SERVICE_HOST = "http://buyhive.tech" || "http://127.0.0.1:5000";
-
+// Create Cart Context
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false); // Track admin login
     const [userId, setUserId] = useState(null);
 
     useEffect(() => {
@@ -15,12 +15,8 @@ export const CartProvider = ({ children }) => {
         if (isLoggedIn && userId) {
             const fetchCart = async () => {
                 const response = await fetch(`http://buyhive.tech/api/cart/${userId}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setCartItems(data);
-                } else {
-                    console.error('Failed to fetch cart:', response.statusText);
-                }
+                const data = await response.json();
+                setCartItems(data);
             };
             fetchCart();
         }
@@ -36,7 +32,7 @@ export const CartProvider = ({ children }) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ product }),
-            }).catch((error) => console.error('Error adding to cart:', error));
+            });
         }
     };
 
@@ -51,12 +47,13 @@ export const CartProvider = ({ children }) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ cart: updatedCart }),
-            }).catch((error) => console.error('Error updating cart:', error));
+            });
         }
     };
 
     const logout = () => {
         setIsLoggedIn(false);
+        setIsAdminLoggedIn(false); // Reset admin login state
         setUserId(null);
         setCartItems([]); // Optionally clear local state
     };
@@ -66,8 +63,26 @@ export const CartProvider = ({ children }) => {
         setUserId(id);
     };
 
+    const adminLogin = () => {
+        setIsAdminLoggedIn(true); // Set admin login state
+    };
+
+    const adminLogout = () => {
+        setIsAdminLoggedIn(false); // Reset admin login state
+    };
+
     return (
-        <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, logout, login, isLoggedIn }}>
+        <CartContext.Provider value={{ 
+            cartItems, 
+            addToCart, 
+            removeFromCart, 
+            logout, 
+            login, 
+            isLoggedIn, 
+            isAdminLoggedIn, // Provide admin login state
+            adminLogin,      // Provide admin login function
+            adminLogout      // Provide admin logout function
+        }}>
             {children}
         </CartContext.Provider>
     );

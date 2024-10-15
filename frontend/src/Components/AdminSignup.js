@@ -1,10 +1,11 @@
+// AdminSignup.js
 import React, { useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, Typography } from '@mui/material';
 
-const Signup = () => {
-    const [formData, setFormData] = useState({ username: '', email: '', password: '' });
-    const navigate = useNavigate();
+const AdminSignup = () => {
+    const [formData, setFormData] = useState({ username: '', password: '' }); // Initialize with empty strings
+    const navigate = useNavigate(); // Initialize useNavigate
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -16,16 +17,25 @@ const Signup = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch('http://buyhive.tech/api/signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        });
-        const data = await response.json();
-        if (data.message) {
-            navigate('/login');
+        try {
+            const response = await fetch('http://buyhive.tech/api/admin/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+            const data = await response.json(); // Parse the response to JSON
+
+            if (response.ok) { // Check if response was successful
+                alert('Admin account created!');
+                navigate('/admin/login'); // Navigate to Admin Login page immediately
+            } else {
+                alert(data.message || 'Signup failed.'); // Show error message if signup failed
+            }
+        } catch (error) {
+            console.error('Error during signup:', error);
+            alert('An error occurred while signing up.'); // Handle network errors
         }
     };
 
@@ -47,22 +57,12 @@ const Signup = () => {
                 boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
             }}
         >
-            <Typography variant="h4" gutterBottom>Signup</Typography>
+            <Typography variant="h4" gutterBottom>Admin Signup</Typography>
             <TextField
                 label="Username"
                 variant="outlined"
                 name="username"
-                value={formData.username}
-                onChange={handleInputChange}
-                fullWidth
-                margin="normal"
-                required
-            />
-            <TextField
-                label="Email"
-                variant="outlined"
-                name="email"
-                value={formData.email}
+                value={formData.username} // Ensure value is defined
                 onChange={handleInputChange}
                 fullWidth
                 margin="normal"
@@ -73,7 +73,7 @@ const Signup = () => {
                 variant="outlined"
                 type="password"
                 name="password"
-                value={formData.password}
+                value={formData.password} // Ensure value is defined
                 onChange={handleInputChange}
                 fullWidth
                 margin="normal"
@@ -86,4 +86,4 @@ const Signup = () => {
     );
 };
 
-export default Signup;
+export default AdminSignup;

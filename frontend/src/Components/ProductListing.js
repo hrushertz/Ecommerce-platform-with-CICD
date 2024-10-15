@@ -3,9 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from './CartContext';
 import { Card, CardContent, Button, Typography, Grid, CircularProgress } from '@mui/material';
 
-// Use the environment variable for the backend URL
-// const BACKEND_SERVICE_HOST = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:5000"; // Change this to match the Ingress path
-
 const ProductListing = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -15,7 +12,7 @@ const ProductListing = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await fetch(`http://buyhive.tech/api/products`); // Use backticks here
+                const response = await fetch('http://buyhive.tech/api/products');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -27,13 +24,12 @@ const ProductListing = () => {
                 setLoading(false);
             }
         };
-    
+
         fetchProducts();
     }, []);
-    
 
     const handleViewDetails = (id) => {
-        navigate(`/api/product/${id}`);
+        navigate(`/product/${id}`);
     };
 
     if (loading) {

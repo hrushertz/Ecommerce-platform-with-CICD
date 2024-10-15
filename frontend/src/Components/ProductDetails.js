@@ -3,9 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useCart } from './CartContext';
 import { Card, CardContent, Button, Typography, CircularProgress } from '@mui/material';
 
-// Update BACKEND_SERVICE_HOST to point to the Ingress
-// const BACKEND_SERVICE_HOST = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:5000";
-
 const ProductDetails = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
