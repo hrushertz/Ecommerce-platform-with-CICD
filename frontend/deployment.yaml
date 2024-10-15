@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: ecom-frontend
-        image: hrushertz/ecom-app:latest 
+        image: hrushertz/ecom-frontend:latest 
         ports:
         - containerPort: 3000
         env:

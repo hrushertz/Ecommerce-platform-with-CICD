@@ -14,6 +14,10 @@ CORS(app)
 app.config["MONGO_URI"] = os.getenv("MONGO_URI")
 mongo = PyMongo(app)
 
+@app.route('/', methods=['GET'])
+def home():
+    return jsonify({'message': 'Welcome to the eCommerce API!'}), 200
+
 @app.route('/api/products', methods=['GET'])
 def get_products():
     products = mongo.db.products.find()

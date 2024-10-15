@@ -18,11 +18,11 @@ spec:
     spec:
       containers:
       - name: ecom-backend
-        image: hrushertz/ecom-api:latest
+        image: hrushertz/ecom-backend:latest
         ports:
         - containerPort: 5000
         env:
-        - name: MONGODB_URI  # Example of setting environment variables
+        - name: MONGO_URI  # Example of setting environment variables
           value: "mongodb+srv://tanvirauti2620:tanvir1234@cluster0.epkgqyp.mongodb.net/ecommerce?retryWrites=true&w=majority"  # Replace with your actual MongoDB URI
 ---
 apiVersion: v1
