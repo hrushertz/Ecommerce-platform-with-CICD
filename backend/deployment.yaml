@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: ecom-backend
-        image: hrushertz/ecom-backend:latest
+        image: hrushertz/ecom-backend:10
         ports:
         - containerPort: 5000
         env:
