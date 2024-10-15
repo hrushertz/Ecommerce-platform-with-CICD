@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: ecom-backend
-        image: gcr.io/ecommerce-test-437909/ecom-api:0.0.6-GLOBAL-STABLE
+        image: hrushertz/ecom-api:latest
         ports:
         - containerPort: 5000
         env:

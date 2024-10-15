@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: ecom-frontend
-        image: gcr.io/ecommerce-test-437909/ecom-app:0.1.25-GLOBAL-STABLE  
+        image: hrushertz/ecom-app:latest 
         ports:
         - containerPort: 3000
         env:
